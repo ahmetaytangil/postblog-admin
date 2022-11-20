@@ -1,0 +1,74 @@
+<app-board-header boardHeaderTitle="Aktif Kuryeler"></app-board-header>
+
+<div class="row" *ngIf="(couriersStatus && couriers?.length) else notCourier">
+  <div class="mb-4 col-xs-12 col-lg-6" style="min-height: 300px">
+    <app-google-maps-general
+      *ngIf="couriersStatus && couriers?.length"
+      [markerLocations]="
+            couriers
+            | filterCourierByCheck:couriersStatus.isAll():couriersStatus.getItems()
+            | filterCourierBySearch:searchValue
+            | getMarkers:couriersStatus:'pin':locData
+      "
+    ></app-google-maps-general>
+  </div>
+  <div class="mb-4 col-xs-12 col-lg-6">
+    <div class="flex-center map-couriers-filter">
+      <app-search (newItemEvent)="filterBySearch($event)" class="w-100"></app-search>
+      <button
+        mat-button
+        class="primary inline w&#45;&#45;100px"
+        [matMenuTriggerFor]="menu"
+      >
+        <img src="./assets/images/icons/interface/filter-light.svg" width="20" height="20" alt="">
+        <span class="ml">Filtre</span>
+      </button>
+      <mat-menu #menu="matMenu">
+        <div class="filters-menu-items" *ngFor="let item of couriersStatus.items">
+          <mat-checkbox
+            [(ngModel)]="item.checked"
+            (click)="$event.stopPropagation()"
+          >{{ item.filter_text }}</mat-checkbox>
+        </div>
+      </mat-menu>
+    </div>
+    <div class="map-couriers-body">
+      <div *ngIf="couriers" class="map-couriers-body-holder">
+        <div
+          *ngFor="
+              let courier of couriers
+              | filterCourierByCheck:couriersStatus.isAll():couriersStatus.getItems()
+              | filterCourierBySearch:searchValue
+          "
+          class="couriers-card flex-center-between"
+        >
+          <div class="--mr">
+            <h6 class="headline-6 fw-regular">{{ courier.name }}</h6>
+            <app-status
+              [status_name]="couriersStatus.getStatusName(courier.status)"
+              [color]="couriersStatus.getStatusColor(courier.status)"
+            ></app-status>
+          </div>
+          <div *ngIf="getLocData(courier.id)" class="flex-center-center">
+            <div class="cell-frame">
+              <span class="cell-frame-text">Uzaklık</span>
+              <span class="cell-frame-text-footer">{{ getLocData(courier.id)?.route?.km }}<small>KM</small></span>
+            </div>
+            <div class="cell-frame">
+              <span class="cell-frame-text">Süre</span>
+              <span class="cell-frame-text-footer">{{ getLocData(courier.id)?.route?.time }}<small>DK</small></span>
+            </div>
+            <!--<div class="cell-frame" *ngIf="getLocData(courier.id)?.route?.name">
+              <span class="cell-frame-text-footer">{{ getLocData(courier.id)?.route?.name }}</span>
+            </div>-->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #notCourier>
+  <p class="headline-6">Kurye Bulunamadı.</p>
+</ng-template>
+

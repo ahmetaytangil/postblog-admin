@@ -1,0 +1,10 @@
+<div *ngIf="boardHeaderTitle" class="board-header">
+  <div class="sidenav-opener">
+    <button mat-button class="inline variant-text sidenav-opener-button" (click)="openSideBar()">
+      <img class="sidenav-opener-img" src="./assets/images/icons/bars-solid.svg" width="16" height="16" alt="">
+    </button>
+  </div>
+  <h2 data-test-id="board-title" class="headline-5 fw-bold">
+    {{ boardHeaderTitle }}
+  </h2>
+</div>

@@ -1,0 +1,125 @@
+<app-board-header boardHeaderTitle="Aktif Kuryeler"></app-board-header>
+
+<div *ngIf="couriers?.length else notCourier">
+  <div class="flex-center-between map-couriers-filter general-sub-header">
+    <div class="app-search-outer">
+      <app-search placeholder="Kurye Ara" (newItemEvent)="filterBySearch($event)"></app-search>
+    </div>
+    <div class="flex-center">
+      <button
+        mat-button
+        class="primary inline w&#45;&#45;100px"
+        [matMenuTriggerFor]="menu"
+      >
+        <img src="./assets/images/icons/interface/filter-light.svg" width="20" height="20" alt="">
+        <span class="ml">Filtre</span>
+      </button>
+      <mat-menu #menu="matMenu">
+        <div class="filters-menu-items" *ngFor="let item of couriersStatus.items">
+          <mat-checkbox
+            [(ngModel)]="item.checked"
+            (click)="$event.stopPropagation()"
+            [checked]="item.checked"
+          >{{ item.filter_text }}</mat-checkbox>
+        </div>
+      </mat-menu>
+      <button
+        mat-button
+        class="secondary-color inline"
+        (click)="reloadPage()"
+      >
+        <img src="./assets/images/icons/arrow-reload-dark.svg" width="20" height="20" alt="">
+        <span class="ml">Güncelle</span>
+      </button>
+    </div>
+  </div>
+  <div class="general-page-body">
+    <div class="overflow-x-auto general-page-body">
+      <table class="general-table-outer">
+        <thead>
+        <tr>
+          <td>
+            <div class="thead-in">
+              Kurye
+            </div>
+          </td>
+          <td>
+            <div class="thead-in">
+              Durumu
+            </div>
+          </td>
+          <td>
+            <div class="thead-in">
+              Anlık Bilgiler
+            </div>
+          </td>
+          <td>
+          </td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr
+          class="cursor-pointer"
+          *ngFor="
+              let courier of couriers
+                  | filterCourierByCheck:couriersStatus.isAll():couriersStatus.getItems()
+                  | filterCourierBySearch:searchValue
+                  | paginate: { itemsPerPage: 12, currentPage: 1 }
+          "
+          (click)="gotoCourierDetail(courier.id)"
+        >
+          <td>
+            <div class="tbody-in">
+              <h6 class="headline-6">{{ courier.name }}</h6>
+            </div>
+          </td>
+          <td>
+            <div class="tbody-in">
+              <app-status
+                class="--mr"
+                [color]="couriersStatus.getStatusColor(courier.status)"
+                [status_name]="couriersStatus.getStatusName(courier.status)"
+              ></app-status>
+            </div>
+          </td>
+          <td>
+            <div class="tbody-in">
+              <div *ngIf="_couriersService.getLocByCourierId(courier.id, locData)" class="flex-center">
+                <div class="cell-frame">
+                  <span class="cell-frame-text">Uzaklık</span>
+                  <span class="cell-frame-text-footer">{{ _couriersService.getLocByCourierId(courier.id, locData)?.route?.km }}<small>KM</small></span>
+                </div>
+                <div class="cell-frame">
+                  <span class="cell-frame-text">Süre</span>
+                  <span class="cell-frame-text-footer">{{ _couriersService.getLocByCourierId(courier.id, locData)?.route?.time }}<small>DK</small></span>
+                </div>
+                <!--<div class="cell-frame" *ngIf="getLocData(courier.id)?.route?.name">
+                  <span class="cell-frame-text-footer">{{ getLocData(courier.id)?.route?.name }}</span>
+                </div>-->
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="tbody-in">
+              <img class="ml-auto" [src]="'angle-right-dark.svg' | getSrc" width="24" height="24" alt="">
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="pagination-bottom">
+    <div class="has-text-centered">
+      <pagination-controls
+        [responsive]="true"
+        previousLabel="Önceki"
+        nextLabel="Sonraki"
+      ></pagination-controls>
+    </div>
+  </div>
+</div>
+
+<ng-template #notCourier>
+  <p class="headline-6">Kurye Bulunamadı.</p>
+</ng-template>

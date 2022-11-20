@@ -1,0 +1,88 @@
+<mat-grid-list
+  rowHeight="100vh"
+  [cols]="breakpoint"
+  (window:resize)="onResize($event)"
+  class="max-height-100vh"
+>
+  <mat-grid-tile>
+    <form
+      #loginForm="ngForm"
+      (ngSubmit)="handleLogin(loginForm)"
+      class="login-form container-fluid overflow-y-auto py-2"
+    >
+      <h5 class="display-6 login-head fw-bold">
+        Hoşgeldiniz!
+      </h5>
+      <h6 class="headline-5">
+        Paketle İşletme Paneli
+      </h6>
+      <section *ngIf="transactionId.length" class="app-input-group">
+        <label for="otp">Telefonunuza gelen kodu giriniz</label>
+        <div class="app-input-outer">
+          <input
+            id="otp"
+            type="text"
+            class="app-input pl-auto"
+            name="otp"
+            ngModel
+            placeholder="ör. 123456"
+            mask="000000"
+            [ngClass]="{error: error.otp}"
+          />
+          <p *ngIf="error.otp" class="body-small app-error">{{ error.otp }}</p>
+        </div>
+      </section>
+      <section *ngIf="!transactionId.length" class="app-input-group">
+        <label for="tel">Telefon numarası</label>
+        <div class="app-input-outer">
+          <img
+            src="./assets/images/icons/communication/phone.svg"
+            class="left"
+            height="20"
+            width="20"
+            alt=""
+          />
+          <input
+            id="tel"
+            type="tel"
+            class="app-input"
+            name="tel"
+            ngModel
+            placeholder="ör. (555) 444-3322"
+            mask="(000) 000-0000"
+            required
+            [ngClass]="{error: error.tel}"
+          />
+          <p *ngIf="error.tel" class="body-small app-error">{{ error.tel }}</p>
+        </div>
+      </section>
+      <button mat-button class="xlarge secondary-color" type="submit">
+        <span class="fw-regular">Gönder</span>
+      </button>
+      <div class="text-center mt-5">
+        <img
+          src="./assets/images/logo/logo-blue.svg"
+          width="196"
+          height="54"
+          alt="siparisim-logo"
+          fxHide.gt-md
+        />
+      </div>
+    </form>
+  </mat-grid-tile>
+  <mat-grid-tile fxHide.lt-md>
+    <div class="login-right-in">
+      <img
+        src="./assets/images/logo/logo-blue.svg"
+        width="196"
+        height="54"
+        alt="siparisim-logo"
+      />
+      <img
+        src="./assets/images/illustrators/man-with-login-screen.svg"
+        width="100%"
+        alt="login-page"
+      />
+    </div>
+  </mat-grid-tile>
+</mat-grid-list>

@@ -1,0 +1,111 @@
+<app-board-header boardHeaderTitle="Mutabakat"></app-board-header>
+
+<div class="flex-center-between general-sub-header">
+  <div class="app-search-outer">
+    <app-search
+      class="w-100"
+      placeholder="Mutabakat Ara"
+    ></app-search>
+  </div>
+  <div>
+    <button
+      mat-button
+      class="primary inline w&#45;&#45;100px"
+      [matMenuTriggerFor]="menu"
+    >
+      <img src="./assets/images/icons/interface/filter-light.svg" width="20" height="20" alt="">
+      <span class="ml">Filtre</span>
+    </button>
+    <mat-menu #menu="matMenu">
+      <mat-radio-group>
+        <div class="filters-menu-items">
+          <mat-radio-button
+            value="ALL"
+            checked
+          >
+            Hepsi
+          </mat-radio-button>
+        </div>
+        <div class="filters-menu-items">
+          <mat-radio-button>
+            2
+          </mat-radio-button>
+        </div>
+      </mat-radio-group>
+    </mat-menu>
+    <mat-menu #calendar>
+      <mat-card (click)="$event.stopPropagation()" class="demo-inline-calendar-card">
+        <mat-calendar
+          (selectedChange)="onChangeDatePicker($event)"
+          [(selected)]="selectedDate"
+        ></mat-calendar>
+      </mat-card>
+    </mat-menu>
+    <button
+      mat-button
+      class="primary inline"
+      [matMenuTriggerFor]="calendar"
+    >
+      <img src="./assets/images/icons/calendar-light.svg" width="20" height="20" alt="">
+      <span *ngIf="selectedDate" class="ml">
+        {{ selectedDate | date:'M-d-y' }}
+      </span>
+      <span *ngIf="!selectedDate" class="ml">
+        Bugün
+      </span>
+    </button>
+    <button
+      mat-button
+      class="secondary-color inline"
+      (click)="reloadPage()"
+    >
+      <img src="./assets/images/icons/arrow-reload-dark.svg" width="20" height="20" alt="">
+      <span class="ml">Güncelle</span>
+    </button>
+  </div>
+</div>
+
+<div *ngIf="consensusData?.length" class="general-page-body">
+  <a
+    *ngFor="let consensus of consensusData | paginate: { itemsPerPage: 12, currentPage: 1 }"
+    routerLink="/consensus-detail/{{ consensus.id }}"
+  >
+    <div
+      class="orders-item flex-center"
+    >
+      <div class="flex-center w-25">
+        <div class="courier-icon-outer --mr">
+          <img [src]="consensus.profile_logo_url || './assets/images/icons/user/user-secondary-dark.svg'" width="24"
+               height="24" alt="">
+        </div>
+        <span class="headline-6 fw-medium">{{ consensus.name_surname }}</span>
+      </div>
+      <div class="flex-center w-50">
+        <app-status
+          class="--mr"
+          color="orange"
+          [status_name]="consensus.status"
+        ></app-status>
+      </div>
+      <div class="w-25" style="text-align: end">
+        <img src="./assets/images/icons/angle-right-dark.svg" width="24" height="24" alt="">
+      </div>
+    </div>
+  </a>
+</div>
+
+<div class="mt-5">
+  <button mat-button class="inline primary" (click)="openConsensusDetail(2)">
+    Open Consensus Detail
+  </button>
+</div>
+
+<div *ngIf="consensusData?.length" class="pagination-bottom">
+  <div class="has-text-centered">
+    <pagination-controls
+      [responsive]="true"
+      previousLabel="Önceki"
+      nextLabel="Sonraki"
+    ></pagination-controls>
+  </div>
+</div>

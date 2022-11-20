@@ -1,0 +1,82 @@
+/* ------------------------------------------------------------------------------------------------------- Font Sizes */
+@function calculateRem($size) {
+  $remSize: calc($size / 16);
+  @return #{$remSize}rem;
+}
+
+@mixin fontSize($size) {
+  font-size: calculateRem($size)!important;
+}
+
+.display-6 {
+  @include fontSize(40);
+  margin: 0;
+}
+
+.display-5 {
+  @include fontSize(48);
+  margin: 0!important;
+}
+
+.display-4 {
+  @include fontSize(56);
+  margin: 0!important;
+}
+
+.headline-6 {
+  @include fontSize(14);
+  margin: 0!important;
+}
+
+.headline-5 {
+  @include fontSize(20);
+  margin: 0!important;
+}
+
+.headline-4 {
+  @include fontSize(24);
+  margin: 0!important;
+}
+
+.headline-3 {
+  @include fontSize(28);
+  margin: 0!important;
+}
+
+.headline-2 {
+  @include fontSize(32);
+  margin: 0!important;
+}
+
+.headline-1 {
+  @include fontSize(40);
+  margin: 0!important;
+}
+
+.fw-bold {
+  font-weight: 700 !important;
+}
+
+.fw-semibold {
+  font-weight: 600 !important;
+}
+
+.fw-medium {
+  font-weight: 500 !important;
+}
+
+.fw-regular {
+  font-weight: 400 !important;
+}
+
+.body-default {
+  font-size: 16px;
+}
+
+.body-small {
+  font-size: 12px;
+}
+
+.body-xsmall {
+  font-size: 10px;
+}

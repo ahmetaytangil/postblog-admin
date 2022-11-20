@@ -1,0 +1,23 @@
+.login-right-in {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-direction: column;
+  height: 100%;
+  padding: 30px;
+  width: 100%;
+}
+
+.login-head {
+  text-align: center;
+  margin-bottom: 20px!important;
+  & + h6 {
+    margin-bottom: 50px!important;
+    text-align: center;
+  }
+}
+
+.login-form {
+  width: 100%;
+  max-width: 400px;
+}

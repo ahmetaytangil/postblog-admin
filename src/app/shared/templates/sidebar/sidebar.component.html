@@ -1,0 +1,44 @@
+<div class="sidebar {{ _auth.sideBarOpened ? 'opened' : '' }}">
+  <div class="sidebar-logo">
+    <img src="./assets/images/logo/logo-yellow.svg" width="129" height="57" alt="">
+  </div>
+  <ul class="sidebar-list">
+    <li class="sidebar-list-item">
+      <a [routerLinkActiveOptions]="{exact: true}" [routerLink]="routerLinks.home" routerLinkActive="active"
+         class="flex-center">
+        <img [src]="'navigation/map-pin-light.svg' | getSrc" width="24" height="24" alt="">
+        <span>Harita</span>
+      </a>
+    </li>
+    <li class="sidebar-list-item">
+      <a [routerLink]="routerLinks.orders" routerLinkActive="active" class="flex-center">
+        <img [src]="'interface/shopping-cart-light.svg' | getSrc" width="24" height="24" alt="">
+        <span>Siparişler</span>
+      </a>
+    </li>
+    <li class="sidebar-list-item">
+      <a [routerLink]="routerLinks.couriers" routerLinkActive="active" class="flex-center">
+        <img [src]="'user/user-light.svg' | getSrc" width="24" height="24" alt="">
+        <span>Kuryeler</span>
+      </a>
+    </li>
+    <!--<li class="sidebar-list-item">
+      <a [routerLink]="routerLinks.consensus" routerLinkActive="active" class="flex-center">
+        <img src="./assets/images/icons/communication/file-check-light.svg" width="24" height="24" alt="">
+        <span>Mutabakat Listesi</span>
+      </a>
+    </li>-->
+  </ul>
+  <div class="sidebar-logout flex-center-between">
+    <div class="sidebar-logout-icon flex-center-center">
+      <img [src]="'user/user-dark.svg' | getSrc" width="25" height="24" alt="">
+    </div>
+    <div>
+      <h2 data-test-id="user-name" class="headline-6">{{ userName | appSlice:0:17 }}</h2>
+      <p class="headline-6">{{ firmName | appSlice:0:17 }}</p>
+    </div>
+    <button mat-button class="variant-text inline" (click)="logOut()">
+      <img [src]="'interface/log-out-light.svg' | getSrc" width="20" height="20" alt="">
+    </button>
+  </div>
+</div>

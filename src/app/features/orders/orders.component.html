@@ -1,0 +1,226 @@
+<app-board-header boardHeaderTitle="Siparişler"></app-board-header>
+
+<div class="flex-center-between general-sub-header">
+  <div class="app-search-outer">
+    <app-search
+      class="w-100"
+      placeholder="Sipariş Ara"
+      (newItemEvent)="onSearchValue($event)"
+    ></app-search>
+  </div>
+  <div class="flex">
+    <mat-menu #pickCourier>
+      <mat-radio-group [(ngModel)]="selectedCourier">
+        <div class="filters-menu-items">
+          <mat-radio-button
+            [value]="-1"
+            (click)="onSelectedCourier($event, -1)"
+            checked
+          >
+            Hepsi
+          </mat-radio-button>
+        </div>
+        <div class="filters-menu-items" *ngFor="let courier of couriers">
+          <mat-radio-button
+            [value]="courier.id"
+            (click)="onSelectedCourier($event, courier.id)"
+          >
+            {{ courier.name }}
+          </mat-radio-button>
+        </div>
+      </mat-radio-group>
+    </mat-menu>
+    <button
+      mat-button
+      class="primary white-bg inline"
+      [matMenuTriggerFor]="pickCourier"
+    >
+      <img [src]="'user.svg' | getSrc:'icon-blues'" width="20" height="20" alt="">
+      <span class="ml">Kurye Seç</span>
+    </button>
+    <mat-menu #calendar>
+      <mat-card (click)="$event.stopPropagation()" class="demo-inline-calendar-card">
+        <mat-calendar
+          (selectedChange)="onChangeDatePicker($event)"
+          [(selected)]="selectedDate"
+        ></mat-calendar>
+      </mat-card>
+    </mat-menu>
+    <button
+      mat-button
+      class="primary white-bg inline"
+      [matMenuTriggerFor]="calendar"
+    >
+      <img [src]="'calendar.svg' | getSrc:'icon-blues'" width="20" height="20" alt="">
+      <span *ngIf="selectedDate" class="ml">
+        {{ selectedDate | date:'M-d-y' }}
+      </span>
+      <span *ngIf="!selectedDate" class="ml">
+        Tarih Seç
+      </span>
+    </button>
+    <mat-menu #menu="matMenu">
+      <mat-radio-group [(ngModel)]="selectedStatus">
+        <div class="filters-menu-items">
+          <mat-radio-button
+            value="ALL"
+            (click)="onFiltered($event, 'ALL')"
+            checked
+          >
+            Hepsi
+          </mat-radio-button>
+        </div>
+        <div class="filters-menu-items" *ngFor="let item of orderStatuses?.items">
+          <mat-radio-button
+            [value]="item.status_code"
+            (click)="onFiltered($event, item.status_code)"
+          >
+            {{ item.filter_text }}
+          </mat-radio-button>
+        </div>
+      </mat-radio-group>
+    </mat-menu>
+    <button
+      mat-button
+      class="primary white-bg inline"
+      [matMenuTriggerFor]="menu"
+    >
+      <img [src]="'filter.svg' | getSrc:'icon-blues'" width="20" height="20" alt="">
+      <span class="ml">Durum Seç</span>
+    </button>
+    <button
+      mat-button
+      class="primary white-bg inline"
+      (click)="openNewOrderDialog()"
+    >
+      <img [src]="'add-plus-circle.svg' | getSrc:'icon-blues'" width="20" height="20" alt="">
+      <span class="ml">Sipariş Gir</span>
+    </button>
+    <button
+      mat-button
+      class="secondary-color inline"
+      (click)="reloadPage()"
+    >
+      <img src="./assets/images/icons/arrow-reload-dark.svg" width="20" height="20" alt="">
+      <span class="ml">Güncelle</span>
+    </button>
+  </div>
+</div>
+
+<!--<div *ngIf="orders" class="general-page-body">
+  <div
+    class="orders-item flex-center"
+    *ngFor="let order of orders.data"
+    (click)="openOrderDetail(order.id)"
+  >
+    <div class="flex-center w-25">
+      <app-status
+        class="&#45;&#45;mr"
+        btnType="delivery"
+        [status_name]="getCurrentStatusName(order.delivery.delivery_status)"
+        [color]="getCurrentStatusColor(order.delivery.delivery_status)"
+      ></app-status>
+      <span class="headline-6 fw-medium order_code_data">{{ order.order_code }}</span>
+    </div>
+    <h6 class="headline-6 fw-medium w-25 order_date_data">{{ order.order_date | date:'short' }}</h6>
+    <h6 class="headline-6 fw-medium w-25 order_customer-name_data">{{ order.customer_name }}</h6>
+    <h6 class="headline-6 fw-medium w-25 order_amount_data">{{ order.amount }} TL</h6>
+    <img src="./assets/images/icons/angle-right-dark.svg" width="24" height="24" alt="">
+  </div>
+</div>-->
+
+<div class="overflow-x-auto general-page-body" *ngIf="orders">
+  <table class="general-table-outer">
+    <thead>
+    <tr>
+      <td>
+        <div class="thead-in">
+          Durumu
+        </div>
+      </td>
+      <td>
+        <div class="thead-in">
+          Sipariş Numarası
+        </div>
+      </td>
+      <td>
+        <div class="thead-in">
+          Sipariş Tarihi
+        </div>
+      </td>
+      <td>
+        <div class="thead-in">
+          Kurye
+        </div>
+      </td>
+      <td>
+        <div class="thead-in">
+          Tutar
+        </div>
+      </td>
+      <td>
+      </td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr
+      class="cursor-pointer"
+      *ngFor="let order of orders.data"
+      (click)="openOrderDetail(order.id)"
+    >
+      <td>
+        <div class="tbody-in">
+          <app-status
+            class="&#45;&#45;mr"
+            btnType="delivery"
+            [status_name]="getCurrentStatusName(order.delivery.delivery_status)"
+            [color]="getCurrentStatusColor(order.delivery.delivery_status)"
+          ></app-status>
+        </div>
+      </td>
+      <td>
+        <div class="tbody-in">
+          <h6 class="headline-6">{{ order.order_code }}</h6>
+        </div>
+      </td>
+      <td>
+        <div class="tbody-in">
+          <h6 class="headline-6">{{ order.order_date | date:'short' }}</h6>
+        </div>
+      </td>
+      <td>
+        <div class="tbody-in">
+          <h6 class="headline-6">{{ order.courier.name || '(Atanmamış)' }}</h6>
+        </div>
+      </td>
+      <td>
+        <div class="tbody-in">
+          <h6 class="headline-6">{{ order.amount }} TL</h6>
+        </div>
+      </td>
+      <td>
+        <div class="tbody-in">
+          <img class="ml-auto" [src]="'angle-right-dark.svg' | getSrc" width="24" height="24" alt="">
+        </div>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<div *ngIf="orders" class="pagination-bottom">
+  <ul class="meal-list">
+    <li
+      *ngFor="let count of getTotalCount(orders.total_count) | paginate: { itemsPerPage: orders.limit, currentPage: orders.page }">
+      {{ count }}
+    </li>
+  </ul>
+  <div class="has-text-centered">
+    <pagination-controls
+      (pageChange)="onPaginationChange($event)"
+      [responsive]="true"
+      previousLabel="Önceki"
+      nextLabel="Sonraki"
+    ></pagination-controls>
+  </div>
+</div>

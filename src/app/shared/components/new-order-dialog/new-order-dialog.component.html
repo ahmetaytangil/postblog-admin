@@ -1,0 +1,118 @@
+<h2 class="mat-dialog-title-outer headline-6" mat-dialog-title>
+  <span>Yeni Sipariş Oluştur</span>
+  <span class="dialog-title-close" mat-dialog-close="">
+        <img alt="" height="12" [src]="'close-dark.svg' | getSrc" width="12">
+      </span>
+</h2>
+<div class="mat-dialog-content-outer">
+  <mat-dialog-content class="mat-typography">
+    <div class="row">
+      <div class="col-xs-6 mb-4">
+        <h6 class="headline-6 fw-medium">Müşteri Adı</h6>
+        <div class="app-input-outer mt-2">
+          <input
+            type="text"
+            class="app-input pl-auto"
+            placeholder="Müşteri adını giriniz"
+            [(ngModel)]="requestForm.full_name"
+          >
+        </div>
+      </div>
+      <div class="col-xs-6 mb-4">
+        <h6 class="headline-6 fw-medium">Telefon Numarası</h6>
+        <div class="app-input-outer mt-2">
+          <input
+            type="phone"
+            class="app-input pl-auto"
+            placeholder="Müşteri telefon numarası"
+            [(ngModel)]="requestForm.phone"
+            mask="(000) 000-0000"
+          >
+        </div>
+      </div>
+      <div class="col-xs-6 mb-4">
+        <h6 class="headline-6 fw-medium">Sipariş Tutarı</h6>
+        <div class="app-input-outer mt-2">
+          <span class="input-currency fz-20">₺</span>
+          <input
+            type="number"
+            class="app-input"
+            placeholder="Sipariş tutarı giriniz"
+            [(ngModel)]="requestForm.amount"
+          >
+        </div>
+      </div>
+      <div class="col-xs-6 mb-4" *ngIf="paymentTypes">
+        <h6 class="headline-6 fw-medium">Ödeme Yöntemi</h6>
+        <div class="app-input-outer mt-2">
+          <select [(ngModel)]="requestForm.payment_method_id" class="app-input pl-auto">
+            <option [value]="null">Ödeme Yöntemi Seçiniz.</option>
+            <option [value]="type.payment_type_code" *ngFor="let type of paymentTypes">
+              {{ type.payment_type_name }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="col-xs-12 mb-4">
+        <h6 class="headline-6 fw-medium">Teslimat Adresi</h6>
+        <div class="app-input-outer mt-2">
+          <input
+            type="text"
+            class="app-input pl-auto"
+            placeholder="Teslimat adresi giriniz"
+            [(ngModel)]="requestForm.address"
+          >
+        </div>
+      </div>
+      <div class="col-xs-12 mb-4">
+        <h6 class="headline-6 fw-medium">Müşteri Notu</h6>
+        <div class="app-input-outer mt-2">
+              <textarea
+                type="phone"
+                class="app-input pl-auto"
+                placeholder="Müşteri notunu giriniz"
+                [(ngModel)]="requestForm.note"
+              ></textarea>
+        </div>
+      </div>
+      <div class="col-xs-12" *ngIf="couriers?.length">
+        <div class="row">
+          <div class="col-xs-6 mb-4">
+            <mat-radio-group class="flex-center-around new-order-checks py-1" [(ngModel)]="orderType">
+              <mat-radio-button [value]="0" checked>
+                Havuza Gönder
+              </mat-radio-button>
+              <mat-radio-button [value]="1">
+                Kuryeye Ata
+              </mat-radio-button>
+            </mat-radio-group>
+          </div>
+          <div class="col-xs-6 mb-4 flex-center" *ngIf="orderType === 1">
+            <div class="app-input-outer">
+              <select class="app-input pl-auto" [(ngModel)]="requestForm.courier_id">
+                <option [value]="null">
+                  Kurye Seçiniz
+                </option>
+                <option [value]="courier.id" *ngFor="let courier of couriers">
+                  {{ courier.name }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="text-center w-100">
+        <button
+          mat-button
+          type="button"
+          (click)="sendRequestForm()"
+          class="inline secondary-color mb-4"
+        >
+          <img [src]="'plus-circle-dark.svg' | getSrc" width="20" height="20" alt="">
+          <span class="ml">Sipariş Oluştur</span>
+        </button>
+        <p class="c-red">{{ error }}</p>
+      </div>
+    </div>
+  </mat-dialog-content>
+</div>

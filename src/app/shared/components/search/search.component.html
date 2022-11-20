@@ -1,0 +1,16 @@
+<div class="app-input-outer">
+  <img
+    src="./assets/images/icons/search-lg.svg"
+    class="left"
+    height="20"
+    width="20"
+    alt=""
+  />
+  <input
+    [placeholder]="placeholder"
+    class="app-input"
+    type="search"
+    [(ngModel)]="value"
+    (ngModelChange)="toParentValue(value)"
+  />
+</div>
